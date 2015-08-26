@@ -1,0 +1,37 @@
+#!/bin/bash -x
+
+if [ ! -e /opt/conjur/etc/ssl/conjur.pem ]; then
+  evoke configure master -h $CONJUR_MASTER_HOSTNAME -p $CONJUR_MASTER_PASSWORD $CONJUR_MASTER_ORGACCOUNT
+fi
+
+ensure_seed_file() {
+  server_type=$1; shift
+  hostname=$1; shift
+    
+  seed_file=$SEED_DIR/${server_type}-${hostname}-seed
+  ready_file=${seed_file}.ready
+  if [ ! -e $seed_file ]; then
+    evoke seed $server_type $hostname $CONJUR_MASTER_HOSTNAME > $seed_file && touch $ready_file
+  fi
+}
+
+for s in $CONJUR_STANDBY_HOSTNAMES; do
+  ensure_seed_file standby $s
+done
+  
+for f in $CONJUR_FOLLOWER_HOSTNAMES; do
+  ensure_seed_file follower $f
+done
+
+# Sleeps forever.
+# Cf. http://stackoverflow.com/questions/9052847/implementing-infinite-wait-in-shell-scripting
+sleep_indefinitely() {
+  PIPE="$1"
+  rm -f "$PIPE"
+  mkfifo "$PIPE"
+  while true; do read; done < "$PIPE"
+}
+
+# Wait for TERM signal
+sleep_indefinitely "/var/run/conjur-master.sv"
+  

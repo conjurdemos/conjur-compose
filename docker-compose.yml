@@ -1,0 +1,26 @@
+master:
+  image: conjur-master
+  environment:
+    CONJUR_MASTER_HOSTNAME: "conjur-master"
+    CONJUR_MASTER_PASSWORD:
+    CONJUR_MASTER_ORGACCOUNT: "docker-conjur"
+    # CONJUR_STANDBY_HOSTNAME: "conjur-standby"
+    CONJUR_FOLLOWER_HOSTNAMES: "conjur-follower"
+    SEED_DIR: "/opt/conjur/seed-files"
+  volumes:
+    - /opt/conjur/seed-files
+    
+  ports:
+    - "443:443"
+    - "636:636"
+    - "5432:5432"
+
+follower:
+  image: conjur-follower
+  links:
+    - master:conjur-master
+  volumes_from:
+    - master
+  environment:
+    SEED_DIR: "/opt/conjur/seed-files"
+    CONJUR_FOLLOWER_HOSTNAME: "conjur-follower"

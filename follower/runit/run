@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ ! -e /opt/conjur/etc/ssl/conjur.key ]; then
+  seed_file=$SEED_DIR/follower-${CONJUR_FOLLOWER_HOSTNAME}-seed
+  ready_file=${seed_file}.ready
+  
+  echo "Waiting for seed file $seed_file..."
+  while [ ! -e $ready_file ]; do
+      sleep 1
+  done
+  
+  set -x
+  evoke configure follower $seed_file || rm $ready_file
+fi
+
+# Sleeps forever.
+# Cf. http://stackoverflow.com/questions/9052847/implementing-infinite-wait-in-shell-scripting
+sleep_indefinitely() {
+  PIPE="$1"
+  rm -f "$PIPE"
+  mkfifo "$PIPE"
+  while true; do read; done < "$PIPE"
+}
+
+# Wait for TERM signal
+sleep_indefinitely "/var/run/conjur-follower.sv"
+  
+
+
