@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -e /opt/conjur/etc/ssl/conjur.key ]; then
-  seed_file=$SEED_DIR/follower-${CONJUR_FOLLOWER_HOSTNAME}-seed
+  seed_file=$SEED_DIR/standby-${CONJUR_STANDBY_HOSTNAME}-seed
   ready_file=${seed_file}.ready
   
   echo "Waiting for ready file $ready_file..."
@@ -10,7 +10,7 @@ if [ ! -e /opt/conjur/etc/ssl/conjur.key ]; then
   done
   
   set -x
-  evoke configure follower $seed_file || rm $ready_file
+  evoke configure standby $seed_file || rm $ready_file
 fi
 
 # Sleeps forever.
@@ -23,7 +23,7 @@ sleep_indefinitely() {
 }
 
 # Wait for TERM signal
-sleep_indefinitely "/var/run/conjur-follower.sv"
+sleep_indefinitely "/var/run/conjur-standby.sv"
   
 
 
