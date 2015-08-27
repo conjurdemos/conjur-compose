@@ -22,8 +22,8 @@ docker-compose up --no-recreate
 ```
 Make sure to use `--no-recreate` unless you want to re-initialize the appliance. 
 
-```
 To stop
+```
 docker-compose stop
 ```
 
