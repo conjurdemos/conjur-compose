@@ -40,7 +40,7 @@ docker-compose stop
 ## How it works
 The first time `docker-compose up` is run, [docker-compose.yml](https://github.com/conjurdemos/conjur-compose/blob/master/docker-compose.yml) begins by creating images to use for master, standy, and follower servers. Each extend the base conjur-appliance image. The conjur-appliance image is based on [phusion:baseimage](https://hub.docker.com/r/phusion/baseimage/) which uses [runit](http://smarden.org/runit/) as its init system.
 
-Containers are then created from the images. The standby and follower containers are each linked to the master container. They also share a volume from the master where seed files will be stored. (A Conjur seed file credentials a server to connect to a particular master, and contains the database keys and certificates required to act as either a standby or a follower.)
+After the images are created, containers are started. The standby and follower containers are each linked to the master container. They also share a volume from the master where seed files will be stored. (A Conjur seed file credentials a server to connect to a particular master, and contains the database keys and certificates required to act as either a standby or a follower.)
 
 Master, standby, and follower each have specialized [run scripts](http://smarden.org/runit/faq.html#create). The scripts first check to see if the server is already configured. If it is, then it does nothing. If it is not, what it does depends on the server type: 
 * the master runs `evoke configure master` to configure itself. When it's done, it generates a seed file for each of the other server types
