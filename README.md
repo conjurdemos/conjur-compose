@@ -36,3 +36,8 @@ To stop
 docker-compose stop
 ```
 
+## How it works
+* specialized images for master, standy, follower that extend base image
+* standby, follower depend on master -- when they come up, they wait for the master to generate the seed files
+* seed files credential standby, follower, giving them access to the encrypted info in the database, and the ability to connect to each other
+* This example brings everything up on the same host. To deploy in a distributed environment, the seed file should be encrypted. Then, the seed file can be deployed to the remote server, along with the decryption key. Once on the remote server, it can decrypt the seed file and start the server.
