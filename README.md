@@ -6,7 +6,7 @@ First, obtain the Conjur appliance tarball from Conjur.
 
 Load the image, then tag it
 ```
-docker load -i conjur-appliance.tgz
+docker load -i conjur.tgz
 docker tag conjurinc/appliance:45 conjur-appliance
 ```
 ## Run
