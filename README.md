@@ -1,24 +1,18 @@
 # conjur-compose
-Bring up a Conjur HA cluster using docker-compose
+Bring up a Conjur HA cluster using docker-compose. Check out a terminal recording here: _https://asciinema.org/a/3h85talp2ku29eleffmeszw9s_
 
-## Build
+## Install
 First, obtain the conjur-appliance tarball from Conjur.
 
-Import it
+Load the image, then tag it
 ```
-docker import conjur-appliance.tar conjur-appliance
+docker load -i conjur-appliance.tgz
+docker tag conjurinc/appliance:45 conjur-appliance
 ```
-
-Then
-```
-make images
-```
-
 ## Run
-
 To run
 ```
-docker-compose up --no-recreate
+CONJUR_MASTER_PASSWORD=your_secure_password docker-compose up --no-recreate
 ```
 Make sure to use `--no-recreate` unless you want to re-initialize the appliance. 
 
