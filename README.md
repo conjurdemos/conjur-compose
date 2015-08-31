@@ -2,7 +2,7 @@
 Bring up a Conjur HA cluster using docker-compose. Check out a terminal recording here: https://asciinema.org/a/3h85talp2ku29eleffmeszw9s
 
 ## Install
-First, obtain the conjur-appliance tarball from Conjur.
+First, obtain the Conjur appliance tarball from Conjur.
 
 Load the image, then tag it
 ```
