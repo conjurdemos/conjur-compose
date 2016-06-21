@@ -1,7 +1,7 @@
 master:
-  extends:
-    file: conjur.yml
-    service: conjur
+  image: conjur-master
+  security_opt:
+    - label:seccomp:undefined
   environment:
     CONJUR_MASTER_HOSTNAME: "conjur-master"
     CONJUR_MASTER_PASSWORD:
@@ -9,23 +9,42 @@ master:
     CONJUR_STANDBY_HOSTNAMES: "conjur-standby"
     CONJUR_FOLLOWER_HOSTNAMES: "conjur-follower"
     SEED_DIR: "/opt/conjur/seed"
+  volumes:
+    - /opt/conjur/seed
+  security_opt:
+    - seccomp:unconfined
+  ports:
+    - "443"
+    - "636"
+    - "5432"
 
 standby:
-  extends:
-    file: conjur.yml
-    service: conjur
+  image: conjur-standby
   links:
     - master:conjur-master
   environment:
     CONJUR_STANDBY_HOSTNAME: "conjur-standby"
     SEED_DIR: "/opt/conjur/seed"
+  volumes_from:
+    - master
+  security_opt:
+    - seccomp:unconfined
+  ports:
+    - "443"
+    - "636"
+    - "5432"
 
 follower:
-  extends:
-    file: conjur.yml
-    service: conjur
+  image: conjur-follower
   links:
     - master:conjur-master
+  volumes_from:
+    - master
   environment:
     SEED_DIR: "/opt/conjur/seed"
     CONJUR_FOLLOWER_HOSTNAME: "conjur-follower"
+  security_opt:
+    - seccomp:unconfined
+  ports:
+    - "443"
+    - "636"
