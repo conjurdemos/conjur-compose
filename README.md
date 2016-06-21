@@ -7,7 +7,7 @@ First, [contact Conjur](http://www.conjur.net/about/contact) to obtain the Conju
 Download the tarball, load the image, then tag it
 ```
 docker load -i conjur.tgz
-docker tag conjurinc/appliance:45 conjur-appliance
+docker tag conjurinc/appliance:45 conjurinc/appliance:latest
 ```
 ## Run
 To run

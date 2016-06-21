@@ -1,0 +1,10 @@
+conjur:
+  image: conjurinc/appliance
+  volumes:
+    - /opt/conjur/seed
+  ports:
+    - "443"
+    - "636"
+    - "5432"
+  security_opt:
+    - seccomp:unconfined
